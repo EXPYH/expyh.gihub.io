@@ -152,3 +152,22 @@ public class CustomErrorAttribute extends DefaultErrorAttributes {
     }
 
 }</code></pre>
+
+
+<pre><code>@RestController
+public class HelloController {
+
+    @RequestMapping("/")
+    public String index() {
+        return "Greetings from Spring Boot!";
+    }
+
+    @RequestMapping("/test")
+    public String index(@RequestHeader("user") String user) throws Exception {
+        if (user.isEmpty()){
+            throw new CustomException(CustomError.NO_HEADER, "user");
+        }
+        return "Hello ! : " + user ;
+    }
+}
+</code></pre>
