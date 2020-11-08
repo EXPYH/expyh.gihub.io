@@ -20,7 +20,8 @@ Spring boot 기본 설정에서는 @RestController에서 예외가 발생하면 
 }</code></pre>
 
 이 에러형식은 ErrorAttribute를 구현한 DefaultErrorAttributes를 따른다. 따라서 이 DefaultErrorAttribute를 상속하여 구현하고 컴포넌트로 등록해주면 다음과 같이 error response를 커스텀할 수 있다. 
-<br/><pre><code>{
+
+<pre><code>{
     "errorCode": "TEST-40401",
     "message": "No such user - user" 
 }</code></pre>
