@@ -89,29 +89,38 @@ public class CustomException extends Exception{
 이제 CustomException을 던질 때 넣어줄 Error를 정의하자. Error는 enum형태로 정의하면 편하다.
 
 <pre><code>
-package com.expyh.exceptiontest.exception;
+public enum CustomError{
+    //java의 에러가 아닌 erorCode의 에러를 뜻하는 것임.
+    
+    NO_HEADER("TEST-40001", HttpStatus.BAD_REQUEST.value(), "Missing header - {}"),
+    NO_PATH_VARIABLE("TEST-40002", HttpStatus.BAD_REQUEST.value(), "Missing path variable - {}");
 
-public class CustomException extends Exception{
-    CustomError error;
+    String errorCode;
+    int status;
     String message;
 
-    public CustomException(CustomError error, String message, String... args) {
-        this.error = error;
+    CustomError(String errorCode, int status, String message) {
+        this.errorCode = errorCode;
+        this.status = status;
         this.message = message;
-        if (args.length > 0){
-            message = String.format(message, args);
-        }
     }
 
-    public CustomError getError() {
-        return error;
+    public String getErrorCode() {
+        return errorCode;
     }
 
-    public void setError(CustomError error) {
-        this.error = error;
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 
-    @Override
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -119,6 +128,4 @@ public class CustomException extends Exception{
     public void setMessage(String message) {
         this.message = message;
     }
-}
-
-</code></pre>
+}</code></pre>
