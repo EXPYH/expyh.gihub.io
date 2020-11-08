@@ -129,3 +129,26 @@ public enum CustomError{
         this.message = message;
     }
 }</code></pre>
+
+<pre><code>@Component
+public class CustomErrorAttribute extends DefaultErrorAttributes {
+
+    @Override
+    public Map&ltString, Object&gt getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+        Map &ltString, Object&gt errorAttributes = super.getErrorAttributes(webRequest, options);
+        Throwable error = super.getError(webRequest);
+        if (error instanceof CustomException) {
+            errorAttributes.put("errorCode", ((CustomException) error).getError().getErrorCode() );
+        }
+        else {
+            errorAttributes.put("errorCode", "TEST-50001");
+        }
+        errorAttributes.remove("timestamp");
+        errorAttributes.remove("status");
+        errorAttributes.remove("error");
+        errorAttributes.remove("path");
+
+        return errorAttributes;
+    }
+
+}</code></pre>
