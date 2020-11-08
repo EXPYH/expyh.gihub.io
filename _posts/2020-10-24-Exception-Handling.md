@@ -6,53 +6,35 @@ categories: Spring boot
 
 ## 발단
 
-최근에 새 서비스를 위해 REST API 개발을 하는데 클라이언트가 error code를 정의해달라고 요청이 왔다. 단순히 status code 정도만 리턴하던 API였는데 임의로 error code를 정의 하다보니 코드 상으로나 로직 상으로나 고민해야할 것이 한 두가지가 아니었다.
+REST API에서는 에러가 발생할 경우 404 같은 일반적인 status code가 아닌, 서버 쪽에서 정의한 error code를 별도로 리턴하는 경우가 있다. 서버쪽에서 error code를 별도로 정의하면 같은 404 에러라도 세분화하여 에러를 구분할 수 있고, 클라이언트 측에서도 상황별로 에러 처리를 하기가 편해진다.
 
-여기서는 내가 코드 상으로 custom error code를 정의했던 방법을 다룬다.
+보통은 @ExceptionHandler 및 @ControllerAdvice를 사용하는 듯 하지만, 이번에는 ErrorAttribute를 재정의하는 방법을 사용해본다.
 
-## 목표
+## DefaultErrorAttributes
 
-Spring boot 기본 설정인 상태에서 예외가 발생하면 클라이언트에게 대충 다음과 같은 형식으로 Response body가 전달된다.
+Spring boot 기본 설정에서는 @RestController에서 예외가 발생하면 클라이언트에게 다음과 같은 형식으로 기본 error response가 전달된다.
 
-<pre><code>
-{
+<pre><code>{
     "timestamp": "2020-10-20T11:57:49.947+00:00",
-    "status": 400,
-    "error": "Bad Request",
-    "message": "Missing request header 'user' for method parameter of type String",
-    "path": "/login"
-}
-</code></pre>
+    "status": 404,
+    "error": "Not found",
+    "message": "blahblah",
+    "path": "/user/abc"
+}</code></pre>
 
-이를 다음과 같이 errorCode와 message 만 남기도록 하고, 클라이언트는 errorCode와 message를 통해서 예외처리를 하도록 하려고 한다.
+이 에러형식은 ErrorAttribute를 구현한 DefaultErrorAttributes를 따른다. 따라서 이 DefaultErrorAttribute를 상속하여 구현하고 빈으로 등록해주면 다음과 같이 error response를 커스텀할 수 있다. 
 
-<pre><code>
-{
+<pre><code>{
     "errorCode": "TEST-40001",
     "message": "Missing header - user" 
-}
-</code></pre>
-
-## 순서
-
-다음과 같은 순서로 이뤄진다.
-
-1. Exception을 상속받는 커스텀 Exception 클래스 정의
-2. enum 형태로 에러 클래스 정의
-3. @ControllerAdvice 정의 
-4. @ExceptionHandler 정의
-5. DefaultErrorAttributes 를 상속받는 커스텀 ErrorAttribute 클래스 정의
-
-
-
+}</code></pre>
+/
 
 ## 1. Exception을 상속받는 커스텀 Exception 클래스 정의
 
-내 맘대로 Exception을 정의하자. Exception을 상속받은 커스텀 클래스를 만들어준다.
-String.format()을 사용하면 인자를 에러메시지의 {} 안에 넣어줄 수 있다.
+그 전에 먼저 커스텀 Exception을 정의하자. Exception을 상속받은 커스텀 클래스를 만들어준다.
 
-<pre><code>
-package com.expyh.exceptiontest.exception;
+<pre><code>package com.expyh.exceptiontest.exception;
 
 public class CustomException extends Exception{
     CustomError error;
@@ -82,15 +64,12 @@ public class CustomException extends Exception{
     public void setMessage(String message) {
         this.message = message;
     }
-}
+}</code></pre>
 
-</code></pre>
+이제 CustomException을 던질 때 매개변수로 넣어줄 Error를 정의하자. Error는 enum형태로 정의하면 편하다.
 
-이제 CustomException을 던질 때 넣어줄 Error를 정의하자. Error는 enum형태로 정의하면 편하다.
-
-<pre><code>
-public enum CustomError{
-    //java의 에러가 아닌 erorCode의 에러를 뜻하는 것임.
+<pre><code>public enum CustomError{
+    //java의 에러가 아닌 erorCode로 표현되는 그 에러를 뜻하는 것임.
     
     NO_HEADER("TEST-40001", HttpStatus.BAD_REQUEST.value(), "Missing header - {}"),
     NO_PATH_VARIABLE("TEST-40002", HttpStatus.BAD_REQUEST.value(), "Missing path variable - {}");
@@ -130,6 +109,9 @@ public enum CustomError{
     }
 }</code></pre>
 
+
+이제 모든 준비가 끝났고 DefaultErrorAttributes만 재정의해주면 된다. getErrorAttributes()를 이용해서 error response의 항목들을 가져온 다음 여기에 새로 추가하거나 제거함으로써 error response를 조정할 수 있다. 
+
 <pre><code>@Component
 public class CustomErrorAttribute extends DefaultErrorAttributes {
 
@@ -153,6 +135,7 @@ public class CustomErrorAttribute extends DefaultErrorAttributes {
 
 }</code></pre>
 
+실제 컨트롤러에서 Exception을 던질 때는 CustomException의 매개변수로 enum으로 선언한 CustomError를 넣어주면 된다. 이렇게 되면 CustomErrorAttribute가 error response를 조작하여 우리가 원하는 형태로 전달해준다.
 
 <pre><code>@RestController
 public class HelloController {
@@ -169,5 +152,4 @@ public class HelloController {
         }
         return "Hello ! : " + user ;
     }
-}
-</code></pre>
+}</code></pre>
