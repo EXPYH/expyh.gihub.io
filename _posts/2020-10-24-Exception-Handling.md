@@ -121,7 +121,7 @@ public enum CustomError{
 public class CustomErrorAttribute extends DefaultErrorAttributes {
 
     @Override
-    public Map&ltString, Object&gt getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+    public Map<String> Object&gt getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
         Map &ltString, Object&gt errorAttributes = super.getErrorAttributes(webRequest, options);
         Throwable error = super.getError(webRequest);
         if (error instanceof CustomException) {
@@ -146,7 +146,7 @@ public class CustomErrorAttribute extends DefaultErrorAttributes {
 ```java
 @RestController
 public class HelloController {
-    List &ltString&gt users = Arrays.asList("expyh");
+    List <String> users = Arrays.asList("expyh");
     @RequestMapping("/test/{user}")
     public String index(@PathVariable("user") String user) throws CustomException {
         if (!users.contains(user)){
