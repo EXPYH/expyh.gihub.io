@@ -30,7 +30,7 @@ masthead_title           : # overrides the website title displayed in the masthe
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : 200
 comments:
-  provider               : "disqus" #false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
+  provider               : false #false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
     shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
@@ -99,9 +99,9 @@ author:
   location         : "Seoul, S.Korea"
   email            : "dublineryh@gmail.com"
   links:
-    - label: "Email"
-      icon: "fas fa-fw fa-envelope-square"
-      url: "dublineryh@gmail.com"
+#   - label: "Email"
+#     icon: "fas fa-fw fa-envelope-square"
+#     url: "dublineryh@gmail.com"
 #   - label: "website"
 #     icon: "fas fa-fw fa-link"
 #     # url: "https://your-website.com"
