@@ -113,7 +113,7 @@ author:
 #     # url: "https://facebook.com/"
     - label: "github"
       icon: "fab fa-fw fa-github"
-        url: "https://github.com/EXPYH"
+      url: "https://github.com/EXPYH"
 #   - label: "instagram"
 #     icon: "fab fa-fw fa-instagram"
 #     # url: "https://instagram.com/"
