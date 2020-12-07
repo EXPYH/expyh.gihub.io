@@ -5,7 +5,6 @@ categories: java
 ---
 
 main함수는 main함수는 java 프로그램의 시작이자 끝의 역할을 하고 있어 다른 함수들과는 다른 취급을 받을거라는 인상을 준다. 
-<br>
 
 ```java
 public class Main {
@@ -15,7 +14,6 @@ public class Main {
 }
 ```
 <br>
-
 그렇다면 이 함수는 Overriding / Overloading이 될까?
 <br>
 
@@ -37,8 +35,10 @@ public class ChildMain extends Main{
 static 메소드가 overriding이 안되는 이유는 다음과 같다
 - static 메소드는 클래스가 어떤 메소드를 호출할 지 runtime이 아닌 compile 타임에 결정하기 때문에 overriding할 수 없음.
 - static 메소드는 애초에 자식 클래스에 상속하는 메소드가 아님(!)
+
 [//]: # (Hello)
 <br>
+
 그래서 아래같이 @Override를 빼면 컴파일 에러는 나지 않는다. 다만 Main의 main 메소드와 ChildMain의 main 메소드는 관련이 전혀 없는 아예 별개의 메소드이다. super(); 로 부모 클래스의 메소드를 호출하는 것도 물론 불가능하다.
 
 <br>
@@ -101,7 +101,6 @@ public class Main {
     }
 }
 ```
-
 <br>
 
 # 결론
