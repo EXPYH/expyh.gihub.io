@@ -1,6 +1,6 @@
 ---
 title: "Spring Boot로 Exception 정의하기" 
-date: 2017-11-08 15:20:00 +0900 
+date: 2020-10-24 15:20:00 +0900 
 categories: Spring boot
 ---
 
@@ -121,8 +121,8 @@ public enum CustomError{
 public class CustomErrorAttribute extends DefaultErrorAttributes {
 
     @Override
-    public Map<String> Object&gt getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Map &ltString, Object&gt errorAttributes = super.getErrorAttributes(webRequest, options);
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+        Map <String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
         Throwable error = super.getError(webRequest);
         if (error instanceof CustomException) {
             errorAttributes.put("errorCode", ((CustomException) error).getError().getErrorCode() );
