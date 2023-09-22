@@ -15,7 +15,7 @@ minimal_mistakes_skin    : "contrast" #"default" , "aqua", "contrast", "dark", "
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Kaiden Aura's blog"
+title                    : #"Kaiden Aura's blog"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "KaidenAura"
@@ -27,7 +27,7 @@ teaser                   : # path of fallback teaser image, e.g. "/assets/images
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 # breadcrumbs            : false # true, false (default)
-words_per_minute         : 200
+words_per_minute         : 300
 comments:
   provider               : false #false (default), "disqus", "discourse", "facebook", "staticman", "staticman_v2", "utterances", "custom"
   disqus:
@@ -277,4 +277,7 @@ defaults:
       comments: true
       share: false
       related: true
-      
+
+# Header
+header:
+  overlay_color: "#333"
